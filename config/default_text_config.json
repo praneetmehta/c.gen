@@ -1,0 +1,14 @@
+{
+    "color": {
+        "X": 255,
+        "Y": 255,
+        "Z": 255
+    },
+    "size": 36,
+    "offset_percent": {
+        "X": 40,
+        "Y": 40
+    },
+    "align": "center",
+    "scale": 0
+}

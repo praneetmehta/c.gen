@@ -1,0 +1,2 @@
+class ContentProviderConfig:
+    pass
