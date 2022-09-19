@@ -6,6 +6,7 @@ import logging
 from content_provider.exceptions.content_provider_not_found import ContentProviderNotFoundException
 from content_provider.providers.dummy_content_provider import DummyContentProvider
 from content_provider.providers.day_fact_content_provider import DayFactContentProvider
+from content_provider.providers.the_crazy_tourist_content_provider import TheCrazyTouristContentProvider
 log = logging.getLogger(__name__)
 
 class ContentProviderFactory:
@@ -16,6 +17,7 @@ class ContentProviderFactory:
         self._content_providers = {}
         self._register_content_provider(ContentProviderType.DUMMY, DummyContentProvider())
         self._register_content_provider(ContentProviderType.DAY_FACT, DayFactContentProvider())
+        self._register_content_provider(ContentProviderType.TCT, TheCrazyTouristContentProvider())
 
     def _register_content_provider(self, type : ContentProviderType, provider : ContentProvider) -> None:
         if type in self._content_providers:

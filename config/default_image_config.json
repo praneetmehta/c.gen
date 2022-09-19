@@ -8,5 +8,6 @@
         "Y": 0,
         "Z": 0
     },
-    "image_url": ""
+    "image_url": "",
+    "darken": "True"
 }

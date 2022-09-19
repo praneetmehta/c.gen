@@ -1,9 +1,9 @@
 from dataclasses import dataclass
 
-from content_provider.config.content import Content
+from content_provider.config.frame import Frame
 
 
 @dataclass
 class Request:
-    content: Content
+    content: Frame
     output_path: str

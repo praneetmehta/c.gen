@@ -1,0 +1,16 @@
+{
+    "color": {
+        "X": 235,
+        "Y": 235,
+        "Z": 235
+    },
+    "size": 26,
+    "offset_percent": {
+        "X": 10,
+        "Y": 80
+    },
+    "align": "",
+    "scale": 0,
+    "split_by_lines": 1
+
+}

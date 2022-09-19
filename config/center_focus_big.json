@@ -4,10 +4,10 @@
         "Y": 255,
         "Z": 255
     },
-    "size": 36,
+    "size": 74,
     "offset_percent": {
         "X": 10,
-        "Y": 80
+        "Y": 70
     },
     "align": "center",
     "scale": 0,
