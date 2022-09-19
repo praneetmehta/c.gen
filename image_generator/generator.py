@@ -1,4 +1,5 @@
 import requests
+import os
 from cgitb import text
 from PIL import Image, ImageFont, ImageDraw
 from image_generator.entities.image_config import ImageConfig
@@ -8,27 +9,29 @@ from image_generator.entities.text_config import TextConfig
 
 
 def generate_image(request: Request, text_config: TextConfig, bg_config: ImageConfig) -> bool:
+    tmp_image_path = request.output_path.replace('frames', 'tmp_bg_frames')
     if request.content.use_image:
-        tmp_image_path = request.output_path.replace('frames', 'tmp_bg_frames')
-        img_url = request.content.content_image_url
-        if request.content.content_image_url == None:
-
-        img_data = requests.get(request.content.content_image_url).content
-        with open(tmp_image_path, 'wb') as handler:
-            handler.write(img_data)
+        if request.content.is_image_local:
+            os.system("cp {} {}".format(request.content.content_image_url, tmp_image_path))
+        else:
+            img_url = request.content.content_image_url
+            img_data = requests.get(img_url).content
+            with open(tmp_image_path, 'wb') as handler:
+                handler.write(img_data)
         image = Image.open(tmp_image_path)
         image = image.resize((bg_config.resolution.X, bg_config.resolution.Y))
 
-        source = image.split()
+        if request.content.darken_image:
+            source = image.split()
 
-        R, G, B = 0, 1, 2
-        constant = 3.5 # constant by which each pixel is divided
+            R, G, B = 0, 1, 2
+            constant = 3.5 # constant by which each pixel is divided
 
-        Red = source[R].point(lambda i: i/constant)
-        Green = source[G].point(lambda i: i/constant)
-        Blue = source[B].point(lambda i: i/constant)
+            Red = source[R].point(lambda i: i/constant)
+            Green = source[G].point(lambda i: i/constant)
+            Blue = source[B].point(lambda i: i/constant)
 
-        image = Image.merge(image.mode, (Red, Green, Blue))
+            image = Image.merge(image.mode, (Red, Green, Blue))
     else:
         image = Image.new('RGB', 
                     (bg_config.resolution.X, bg_config.resolution.Y), 
@@ -70,4 +73,6 @@ def generate_image(request: Request, text_config: TextConfig, bg_config: ImageCo
     )
 
     image.save(request.output_path)
+    if request.content.use_image and request.content.is_image_local:
+        os.system("rm {}".format(request.output_path.replace('frames', 'tmp_bg_frames')))
     return True

@@ -1,2 +1,6 @@
+from dataclasses import dataclass
+
+
+@dataclass
 class ContentProviderConfig:
-    pass
+    max_frames : int = 10

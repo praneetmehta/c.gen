@@ -36,7 +36,10 @@ class Orchestrator:
                 for i, segment in enumerate(content.content_segmented):
                     generate_image(Request(segment, dir_to_use + '/frames/{}.png'.format(i)), request.text_config, request.image_config)
 
-        os.system("./ffmpeg -framerate 0.2 -i " + dir_to_use + "/frames/%1d.png -i /Users/praneet/Downloads/music_ncs.mp3 -vf fps=10 -pix_fmt yuv420p -shortest " + dir_to_use +"/output.mp4")
+        os.system("./ffmpeg -framerate 0.2 -i " + dir_to_use + "/frames/%1d.png -vf fps=10 -pix_fmt yuv420p " + dir_to_use +"/output_without_audio.mp4")
+        output = os.popen("./ffprobe -v error -show_entries format=duration -of default=noprint_wrappers=1:nokey=1 {}/output_without_audio.mp4".format(dir_to_use))
+        duration = int(float(output.read().strip('\n')))
+        os.system('./ffmpeg -i {}/output_without_audio.mp4 -i /Users/praneet/Downloads/music_ncs.mp3 -af "afade=t=in:st=0:d=10,afade=t=out:st={}:d=10" -shortest -c:v copy -c:a aac {}/output.mp4'.format(dir_to_use, str(duration-10), dir_to_use))
 
 if __name__ == "__main__":
     orch : Orchestrator = Orchestrator()
